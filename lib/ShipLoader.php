@@ -2,6 +2,8 @@
 
 class ShipLoader
 {
+    private $pdo;
+
     /**
      * @return Ship[]
      */
@@ -18,7 +20,7 @@ function getShips()
 
 private function queryForShips()
 {
-    $pdo = new PDO('mysql:host=127.127.126.50;dbname=oo_battle', 'wolf','pass1234');
+    $pdo = $this->getPDO();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $statement = $pdo->prepare('SELECT * FROM ship');
     $statement->execute();
@@ -32,7 +34,7 @@ private function queryForShips()
      */
 public function findOneById($id)
 {
-    $pdo = new PDO('mysql:host=127.127.126.50;dbname=oo_battle', 'wolf','pass1234');
+    $pdo = $this->getPDO();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $statement = $pdo->prepare('SELECT * FROM ship WHERE id = :id');
     $statement->execute(array('id' => $id));
@@ -52,6 +54,19 @@ private function createShipFromData(array $shipData)
         $ship->setJediFactor($shipData['jedi_factor']);
         $ship->setStrength($shipData['strength']);
         return $ship;
+    }
+
+        /**
+     * @return PDO
+     */
+
+    private function getPDO()
+    {
+            if ($this->pdo === null) {
+                $this->pdo =new PDO('mysql:host=127.127.126.50;dbname=oo_battle', 'wolf','pass1234');
+                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            }
+            return $this->pdo;
     }
 
 }
