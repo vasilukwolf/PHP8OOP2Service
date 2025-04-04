@@ -2,10 +2,8 @@
 require __DIR__.'/bootstrap.php';
 
 $container = new Container($configuration);
-$pdo = $container->getPDO();
 
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$shipLoader = new ShipLoader($pdo);
+$shipLoader = $container->getShipLoader();
 
 $ships = $shipLoader->getShips();
 
